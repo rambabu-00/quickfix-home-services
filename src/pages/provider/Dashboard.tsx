@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import { Calendar, Clock, Settings } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Booking {
   id: string;
@@ -22,8 +22,26 @@ interface Booking {
 
 export default function ProviderDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Check if provider has completed onboarding (has a profile + at least 1 service)
+  useEffect(() => {
+    if (!user) return;
+    const checkOnboarding = async () => {
+      const [profileRes, servicesRes] = await Promise.all([
+        supabase.from("provider_profiles").select("id, location").eq("user_id", user.id).maybeSingle(),
+        supabase.from("provider_services").select("id").eq("provider_id", user.id).limit(1),
+      ]);
+      const hasProfile = !!profileRes.data?.location;
+      const hasServices = (servicesRes.data?.length ?? 0) > 0;
+      if (!hasProfile || !hasServices) {
+        navigate("/provider/onboarding", { replace: true });
+      }
+    };
+    checkOnboarding();
+  }, [user, navigate]);
 
   const fetchBookings = async () => {
     if (!user) return;

@@ -9,7 +9,7 @@ interface Props {
 export default function ProtectedRoute({ children, allowedRoles }: Props) {
   const { user, role, loading } = useAuth();
 
-  if (loading) return <div className="flex min-h-[60vh] items-center justify-center text-muted-foreground">Loading...</div>;
+  if (loading || (user && !role)) return <div className="flex min-h-[60vh] items-center justify-center text-muted-foreground">Loading...</div>;
   if (!user) return <Navigate to="/login" replace />;
   if (allowedRoles && role && !allowedRoles.includes(role)) return <Navigate to="/" replace />;
 

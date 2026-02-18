@@ -24,6 +24,5 @@ https://your-vercel-url.vercel.app
 
 ## Developed By
 
-Rambabu
-Bharadwaaz
-Aravind
+Rambabu G
+

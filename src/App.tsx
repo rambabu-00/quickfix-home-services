@@ -16,6 +16,7 @@ import BookService from "./pages/BookService";
 import MyBookings from "./pages/MyBookings";
 import ProviderDashboard from "./pages/provider/Dashboard";
 import ProviderProfileEdit from "./pages/provider/ProfileEdit";
+import ProviderOnboarding from "./pages/provider/Onboarding";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageCategories from "./pages/admin/ManageCategories";
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/provider/:providerId" element={<ProviderDetail />} />
             <Route path="/book/:providerId" element={<ProtectedRoute allowedRoles={["customer"]}><BookService /></ProtectedRoute>} />
             <Route path="/my-bookings" element={<ProtectedRoute allowedRoles={["customer"]}><MyBookings /></ProtectedRoute>} />
+            <Route path="/provider/onboarding" element={<ProtectedRoute allowedRoles={["service_provider"]}><ProviderOnboarding /></ProtectedRoute>} />
             <Route path="/provider/dashboard" element={<ProtectedRoute allowedRoles={["service_provider"]}><ProviderDashboard /></ProtectedRoute>} />
             <Route path="/provider/profile" element={<ProtectedRoute allowedRoles={["service_provider"]}><ProviderProfileEdit /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
